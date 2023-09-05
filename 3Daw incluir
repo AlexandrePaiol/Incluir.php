@@ -1,0 +1,39 @@
+<?php
+$msg = "";
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $disciplina_nome = $_POST["disciplina_nome"];
+    $disciplina_sigla = $_POST["disciplina_sigla"];
+    $carga_horaria = $_POST["carga_horaria"];
+    $descricao = $_POST["descricao"];
+
+    if (empty($disciplina_nome) || empty($disciplina_sigla) || empty($carga_horaria)) {
+        $msg = "Preencha todos os campos obrigatórios!";
+    } else {
+        $arquivo_disciplinas = fopen("disciplinas.txt", "a") or die("Erro ao abrir o arquivo");
+        $linha = "$disciplina_nome;$disciplina_sigla;$carga_horaria;$descricao\n";
+        fwrite($arquivo_disciplinas, $linha);
+        fclose($arquivo_disciplinas);
+        $msg = "Disciplina criada com sucesso!";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Criar Nova Disciplina</title>
+</head>
+<body>
+<h1>Criar Nova Disciplina</h1>
+<form action="ex07_incluirDisciplina.php" method="POST">
+    Nome da Disciplina: <input type="text" name="disciplina_nome"><br><br>
+    Sigla: <input type="text" name="disciplina_sigla"><br><br>
+    Carga Horária: <input type="text" name="carga_horaria"><br><br>
+    Descrição: <textarea name="descricao"></textarea><br><br>
+    <input type="submit" value="Criar Nova Disciplina">
+</form>
+<p><?php echo $msg; ?></p>
+<br>
+</body>
+</html>
